@@ -1,25 +1,23 @@
 package src;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.lwjgl.opengl.GL20;
 
 public class Shader {
-    public void load() {
-        String vertexShaderSource = "shaders.shader.vert";
-        
-        int vertexShader;
-        vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    public void load() throws IOException {
+        String vertexShaderSource = Files.readString(Paths.get("shaders/shader.vert"));
 
-        glShaderSource(vertexShader, vertexShaderSource);
-        glCompileShader(vertexShader);
+        int vertexShader;
+        vertexShader = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+
+        GL20.glShaderSource(vertexShader, vertexShaderSource);
+        GL20.glCompileShader(vertexShader);
 
         int success;
         String infoLog;
-        glGetShaderi(vertexShader, GL_COMPILE_STATUS);
-
-        if(!success) {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            System.err.println("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" + infoLog);
-        }
+        GL20.glGetShaderiv(vertexShader, GL20.GL_COMPILE_STATUS, success);
     }
 }
